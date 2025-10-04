@@ -33,7 +33,7 @@
 #define MIN_AZIMUTH_DEG           0
 #define MAX_AZIMUTH_DEG           180
 #define DEFAULT_AZIMUTH_DEG       90
-#define DEFAULT_ELEVATION_DEG     60
+#define DEFAULT_ELEVATION_DEG     90
 
 // FAULT THRESHOLDS
 #define MAX_ERROR_COUNT           10
@@ -52,5 +52,8 @@
 #define SIG_TRACKING  0x5A5A
 #define SIG_SERVO     0xC3C3
 #define SIG_EXPECTED  (SIG_INIT ^ SIG_SENSOR ^ SIG_TRACKING ^ SIG_SERVO)
+
+#define CMD_BUFFER_SIZE           64
+#define CMD_MAX_ARG_LENGTH        20
 
 #endif // CONFIG_H

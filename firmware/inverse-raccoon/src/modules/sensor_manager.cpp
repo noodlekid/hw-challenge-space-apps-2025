@@ -41,6 +41,11 @@ static uint16_t sensor_read_filtered(uint8_t pin) {
 }
 
 void sensor_manager_init() {
+  // pinMode(SENSOR_PIN_TOPLEFT, INPUT_PULLUP);
+  // pinMode(SENSOR_PIN_TOPRIGHT, INPUT_PULLUP);
+  // pinMode(SENSOR_PIN_BOTTOMLEFT, INPUT_PULLUP);
+  // pinMode(SENSOR_PIN_BOTTOMRIGHT, INPUT_PULLUP);
+
   g_current_position.azimuth_error = 0;
   g_current_position.elevation_error = 0;
   g_current_position.sun_detected = false;
