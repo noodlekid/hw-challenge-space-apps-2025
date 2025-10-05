@@ -85,7 +85,7 @@ void sensor_calculate_position(const SensorReading_t* reading, SunPosition_t* po
   
   // Detect if sun is visible 
   // TODO: the threshold may need tuning, idk what ambient light levels are like
-  position->sun_detected = (average > 15);
+  position->sun_detected = (average > SUN_TRESHOLD);
   
   if (!position->sun_detected) {
     position->azimuth_error = 0;
