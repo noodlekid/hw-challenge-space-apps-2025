@@ -15,6 +15,11 @@
 #define SUN_LOSS_TIMEOUT_MS       5000
 
 // HARDWARE PIN DEFINITIONS
+// #define SENSOR_PIN_TOPLEFT        A1
+// #define SENSOR_PIN_TOPRIGHT       A3
+// #define SENSOR_PIN_BOTTOMLEFT     A0
+// #define SENSOR_PIN_BOTTOMRIGHT    A2
+// #define BATTERY_VOLTAGE_PIN       A4
 #define SENSOR_PIN_TOPLEFT        A0
 #define SENSOR_PIN_TOPRIGHT       A1
 #define SENSOR_PIN_BOTTOMLEFT     A2
@@ -27,18 +32,27 @@
 
 // TRACKING PARAMETERS
 #define DEADBAND_DEGREES          2.0f
-#define PROPORTIONAL_GAIN         0.8f
-#define MIN_ELEVATION_DEG         30
-#define MAX_ELEVATION_DEG         150
-#define MIN_AZIMUTH_DEG           0
-#define MAX_AZIMUTH_DEG           180
+#define PROPORTIONAL_GAIN         0.08f
+// Servo physical limits (0-180 for standard servos)
+#define SERVO_MIN_DEG             0
+#define SERVO_MAX_DEG             180
+
+// Azimuth operational limits (add safety margin from hard stops)
+#define MIN_AZIMUTH_DEG           10    // 10° margin from 0° hard stop
+#define MAX_AZIMUTH_DEG           170   // 10° margin from 180° hard stop
+
+// Elevation operational limits  
+#define MIN_ELEVATION_DEG         0
+#define MAX_ELEVATION_DEG         180
+
+// Default positions
 #define DEFAULT_AZIMUTH_DEG       90
-#define DEFAULT_ELEVATION_DEG     90
+#define DEFAULT_ELEVATION_DEG     90    
 
 // FAULT THRESHOLDS
 #define MAX_ERROR_COUNT           10
-#define SENSOR_MIN_VALUE          50
-#define SENSOR_MAX_VALUE          950
+#define SENSOR_MIN_VALUE          0
+#define SENSOR_MAX_VALUE          1023
 
 // EEPROM ADDRESSES
 #define CONFIG_PRIMARY_ADDR       0x0000

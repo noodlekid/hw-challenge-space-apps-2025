@@ -85,7 +85,7 @@ void sensor_calculate_position(const SensorReading_t* reading, SunPosition_t* po
   
   // Detect if sun is visible 
   // TODO: the threshold may need tuning, idk what ambient light levels are like
-  position->sun_detected = (average > 200);
+  position->sun_detected = (average > 15);
   
   if (!position->sun_detected) {
     position->azimuth_error = 0;
@@ -101,7 +101,7 @@ void sensor_calculate_position(const SensorReading_t* reading, SunPosition_t* po
   
   // Normalize to degree,
   // TODO: the scaling factor may need tuning
-  position->azimuth_error = horizontal_diff / 10.0f;
+  position->azimuth_error =  horizontal_diff / 10.0f;
   position->elevation_error = vertical_diff / 10.0f;
   
   // Cache current position
