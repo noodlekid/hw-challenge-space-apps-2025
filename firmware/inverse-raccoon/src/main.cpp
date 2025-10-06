@@ -8,6 +8,7 @@
 
 #include "config.h"
 #include "types.h"
+#include "utils/crc.h"
 #include "modules/config_manager.h"
 #include "modules/sensor_manager.h"
 #include "modules/tracking_controller.h"
@@ -96,6 +97,58 @@ void loop() {
     
     g_flow_signature ^= SIG_SERVO;
   } 
+
+  else if (control_mode == CONTROL_DEMO) {
+  // ===== DEMO MODE =====
+  // Simulate sun arc from sunrise to sunset
+  
+  uint32_t elapsed = millis() - command_get_demo_start_time();
+  float progress = (float)elapsed / 45000.0f;  // 45 second demo
+  
+  if (progress >= 1.0f) {
+    // Demo complete, return to auto mode
+    Serial.println(F("[DEMO] Arc complete - returning to AUTO mode"));
+    // This will switch mode on next command_handler_process call
+    Serial.println(F("AUTO"));  // Send AUTO command to switch modes
+    progress = 1.0f;
+  }
+  
+  // Simulate sun arc:
+  // Start: Az=60°, El=20° (sunrise in east)
+  // Peak:  Az=90°, El=70° (noon overhead)
+  // End:   Az=120°, El=20° (sunset in west)
+  
+  float azimuth, elevation;
+  
+  if (progress < 0.5f) {
+    // First half: sunrise to noon
+    float t = progress * 2.0f;  // 0 to 1
+    azimuth = 60.0f + (30.0f * t);      // 60° to 90°
+    elevation = 20.0f + (50.0f * t);    // 20° to 70°
+  } else {
+    // Second half: noon to sunset
+    float t = (progress - 0.5f) * 2.0f;  // 0 to 1
+    azimuth = 90.0f + (30.0f * t);      // 90° to 120°
+    elevation = 70.0f - (50.0f * t);    // 70° to 20°
+  }
+  
+  servo_cmd.azimuth = (uint16_t)azimuth;
+  servo_cmd.elevation = (uint16_t)elevation;
+  servo_cmd.crc16 = crc16(&servo_cmd, offsetof(ServoCommand_t, crc16));
+  
+  // Execute demo command
+  if (safety_get_mode() != MODE_EMERGENCY) {
+    servo_execute_command(&servo_cmd);
+  }
+  
+  g_flow_signature ^= SIG_SENSOR;
+  g_flow_signature ^= SIG_TRACKING;
+  g_flow_signature ^= SIG_SERVO;
+  
+  // Read sensors for telemetry
+  SensorReading_t sensor_data;
+  sensor_read_all(&sensor_data);
+}
   else {
     // ===== AUTOMATIC MODE =====
     // Normal sun tracking operation

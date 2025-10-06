@@ -13,9 +13,15 @@
  */
 typedef enum {
   CONTROL_AUTO = 0,    // Normal sun tracking
-  CONTROL_MANUAL       // Manual servo positioning
+  CONTROL_MANUAL,      // Manual servo positioning
+  CONTROL_DEMO         // Ephemeris demo mode
 } ControlMode_t;
 
+
+/**
+ * @brief Get demo mode start time
+ */
+uint32_t command_get_demo_start_time(void);
 /**
  * @brief Initialize command handler
  */

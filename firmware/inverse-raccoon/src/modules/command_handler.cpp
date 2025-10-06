@@ -17,6 +17,8 @@ static uint8_t g_cmd_index = 0;
 static ControlMode_t g_control_mode = CONTROL_AUTO;
 static ServoCommand_t g_pending_command;
 static bool g_has_pending = false;
+static uint32_t g_demo_start_time = 0;
+static const uint32_t DEMO_DURATION_MS = 45000;
 
 /**
  * @brief Parse and execute a command string
@@ -110,6 +112,14 @@ static void command_parse(const char* cmd) {
     Serial.print(MAX_ELEVATION_DEG);
     Serial.println(F("]"));
   }
+
+  else if (strncmp(cmd, "DEMO", 4) == 0) {
+    g_control_mode = CONTROL_DEMO;
+    g_demo_start_time = millis();
+    g_has_pending = false;
+    Serial.println(F("[CMD] Ephemeris demo mode - simulating sun arc"));
+    Serial.println(F("  Sunrise (East) -> Noon (Peak) -> Sunset (West)"));
+  }
   
   // Unknown command
   else if (*cmd != '\0') {
@@ -126,6 +136,10 @@ void command_handler_init(void) {
   memset(g_cmd_buffer, 0, CMD_BUFFER_SIZE);
   
   Serial.println(F("[CMD] Command interface ready (type HELP)"));
+}
+
+uint32_t command_get_demo_start_time(void) {
+  return g_demo_start_time;
 }
 
 void command_handler_process(void) {
